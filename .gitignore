@@ -1,0 +1,53 @@
+# Archivos de entorno
+.env
+*.env
+.env.*
+
+# Archivos de configuración de AWS
+.aws/
+credentials
+config
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Airflow
+airflow.db
+airflow-webserver.pid
+logs/
+dags/__pycache__/
+plugins/__pycache__/
+*.log
+
+# Docker
+*.log
+*.pid
+*.sock
+docker-compose.override.yml
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# Archivos temporales
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Archivos de salida
+output/
+.parquet/
+*.parquet
+*.csv
+*.json
