@@ -41,7 +41,7 @@ def trigger_airbyte_sync():
     url = "https://api.airbyte.com/v1/jobs"
     payload = {
         "jobType": "sync",
-        "connectionId": "f808667a-5c39-4658-8297-136651d6079b"
+        "connectionId": "e4b6dbae-7d74-4b72-9678-dc5d8b0f3afc"
     }
     headers = {
         "accept": "application/json",
@@ -55,13 +55,18 @@ def trigger_airbyte_sync():
 
 
 with DAG(
-    dag_id="dag_api",
+    dag_id="dag_mongodb",
     start_date=datetime(2025, 1, 1),
     schedule_interval=None, 
     catchup=False,
     tags=["Henry"],
 ) as dag:
     
+    task_test = BashOperator(
+    task_id = "test",
+    bash_command = "echo 1",
+    )
+
     trigger_airbyte = PythonOperator(
     task_id = "trigger_airbyte_sync",
     python_callable = trigger_airbyte_sync,
@@ -69,10 +74,10 @@ with DAG(
 
     run_glue_job_bronze = AwsGlueJobOperator(
     task_id='run_glue_job_broze_to_silver',
-    job_name='bronze_to_silver_api',  # reemplazá con el nombre real del Glue Job
+    job_name='bronze_to_silver',  # reemplazá con el nombre real del Glue Job
     region_name='us-east-2',          # o la región donde lo creaste
     iam_role_name='GlueJobRole_PI_M3',      # el rol IAM con permisos a S3
-    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/bronze_to_silver_api.py',  # si usás script en S3
+    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/bronze_to_silver.py',  # si usás script en S3
     create_job_kwargs={
         'GlueVersion': '5.0',
         'NumberOfWorkers': 2,
@@ -80,16 +85,16 @@ with DAG(
     })
 
     run_glue_job_silver = AwsGlueJobOperator(
-    task_id='run_glue_job_silver_to_gold_api',
-    job_name='silver_to_gold_api',  # reemplazá con el nombre real del Glue Job
+    task_id='run_glue_job_silver_to_gold',
+    job_name='silver_to_gold',  # reemplazá con el nombre real del Glue Job
     region_name='us-east-2',          # o la región donde lo creaste
     iam_role_name='GlueJobRole_PI_M3',      # el rol IAM con permisos a S3
-    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/silver_to_gold_api.py',  # si usás script en S3
+    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/silver_to_gold.py',  # si usás script en S3
     create_job_kwargs={
         'GlueVersion': '5.0',
         'NumberOfWorkers': 2,
         'WorkerType': 'G.1X'
     })
 
-    trigger_airbyte >> run_glue_job_bronze >> run_glue_job_silver
+    task_test >> trigger_airbyte >> run_glue_job_bronze >> run_glue_job_silver
 
