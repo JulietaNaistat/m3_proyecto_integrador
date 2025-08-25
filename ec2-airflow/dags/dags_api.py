@@ -69,10 +69,10 @@ with DAG(
 
     run_glue_job_bronze = AwsGlueJobOperator(
     task_id='run_glue_job_broze_to_silver',
-    job_name='bronze_to_silver_api',  # reemplazá con el nombre real del Glue Job
-    region_name='us-east-2',          # o la región donde lo creaste
-    iam_role_name='GlueJobRole_PI_M3',      # el rol IAM con permisos a S3
-    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/bronze_to_silver_api.py',  # si usás script en S3
+    job_name='bronze_to_silver_api',  
+    region_name='us-east-2',          
+    iam_role_name='GlueJobRole_PI_M3',      
+    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/bronze_to_silver_api.py',  
     create_job_kwargs={
         'GlueVersion': '5.0',
         'NumberOfWorkers': 2,
@@ -81,10 +81,10 @@ with DAG(
 
     run_glue_job_silver = AwsGlueJobOperator(
     task_id='run_glue_job_silver_to_gold_api',
-    job_name='silver_to_gold_api',  # reemplazá con el nombre real del Glue Job
-    region_name='us-east-2',          # o la región donde lo creaste
-    iam_role_name='GlueJobRole_PI_M3',      # el rol IAM con permisos a S3
-    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/silver_to_gold_api.py',  # si usás script en S3
+    job_name='silver_to_gold_api',  
+    region_name='us-east-2',          
+    iam_role_name='GlueJobRole_PI_M3',      
+    script_location='s3://aws-glue-assets-493834425520-us-east-2/scripts/silver_to_gold_api.py',  
     create_job_kwargs={
         'GlueVersion': '5.0',
         'NumberOfWorkers': 2,
